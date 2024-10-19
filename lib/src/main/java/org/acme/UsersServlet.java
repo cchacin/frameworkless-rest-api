@@ -27,7 +27,7 @@ public class UsersServlet extends HttpServlet {
     }
 
     public UsersServlet() {
-        this(User::firstName);
+        this(UserJsonSerializer::serialize);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
