@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:17.0-bookworm
+    restart: always
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./tmp/postgres-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"

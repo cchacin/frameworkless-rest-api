@@ -14,12 +14,12 @@
 
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
-        <junit.version>5.11.0</junit.version>
+        <junit.version>5.11.3</junit.version>
         <awaitility.version>4.2.2</awaitility.version>
         <assertj.version>3.26.3</assertj.version>
-        <jqwik.version>1.9.0</jqwik.version>
-        <record.builder.version>41</record.builder.version>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <jqwik.version>1.9.1</jqwik.version>
+        <record.builder.version>43</record.builder.version>
+        <mapstruct.version>1.6.2</mapstruct.version>
         <tagNameFormat>v@{project.version}</tagNameFormat>
         <preparationGoals>clean compile test-compile</preparationGoals>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,6 +48,18 @@
             <groupId>net.jqwik</groupId>
             <artifactId>jqwik</artifactId>
             <version>${jqwik.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>5.5.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
