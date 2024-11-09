@@ -1,22 +1,18 @@
 package org.acme.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.acme.api.UserDto;
 
 import java.util.List;
 
 public class UserSerializer {
 
-    private static final ObjectWriter MAPPER = new ObjectMapper()
-            .writerFor(new TypeReference<List<UserDto>>() {
-    });
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static String serialize(List<UserDto> users) {
+    public static String serialize(Object value) {
         try {
-            return MAPPER.writeValueAsString(users);
+            return MAPPER.writeValueAsString(value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

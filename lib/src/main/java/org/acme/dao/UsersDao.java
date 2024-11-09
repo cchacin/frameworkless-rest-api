@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UsersDao {
@@ -57,6 +58,29 @@ public class UsersDao {
             statement.setString(2, entity.firstName());
             statement.setString(3, entity.lastName());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Optional<UserEntity> user(UUID userId) {
+        var query = """
+                SELECT id, firstName, lastName FROM users
+                WHERE id::text = ?;
+                """;
+        try (var cnn = datasource.getConnection();
+             var statement = cnn.prepareStatement(query)) {
+            statement.setString(1, userId.toString());
+            var resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(new UserEntity(
+                        UUID.fromString(resultSet.getString("id")),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName")
+                ));
+            } else {
+                return Optional.empty();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
