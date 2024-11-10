@@ -16,20 +16,6 @@ import java.util.UUID;
 
 public class AppServer {
 
-    private static final UsersDao DAO = new UsersDao();
-    private static final UsersService SERVICE = new UsersService(
-            () -> Mapper.entityToCores(DAO.users()),
-            (User.UserId userId) -> DAO.user(userId.value())
-                    .map(Mapper::entityToCore)
-                    .orElseThrow()
-    );
-    private static final UsersApi API = new UsersApi(
-            UserSerializer::serialize,
-            () -> Mapper.coreToDtos(SERVICE.users()),
-            (UUID uuid) -> SERVICE.user(User.UserId.of(uuid))
-                    .map(Mapper::coreToDto)
-                    .orElseThrow()
-    );
     private final Server server;
 
     public AppServer() {
@@ -37,10 +23,24 @@ public class AppServer {
     }
 
     public AppServer(int port) {
-        server = new Server(new VirtualThreadPool(200));
+        var usersDao = new UsersDao();
+        var usersService = new UsersService(
+                () -> Mapper.entityToCores(usersDao.users()),
+                (User.UserId userId) -> usersDao.user(userId.value())
+                        .map(Mapper::entityToCore)
+                        .orElseThrow()
+        );
+        var usersApi = new UsersApi(
+                UserSerializer::serialize,
+                () -> Mapper.coreToDtos(usersService.users()),
+                (UUID uuid) -> usersService.user(User.UserId.of(uuid))
+                        .map(Mapper::coreToDto)
+                        .orElseThrow()
+        );
+        server = new Server(new VirtualThreadPool());
         server.setStopAtShutdown(true);
         server.addConnector(createConnector(port));
-        server.setHandler(createHandler());
+        server.setHandler(createHandler(usersApi));
     }
 
     public void start() throws Exception {
@@ -52,19 +52,19 @@ public class AppServer {
     }
 
     public int getPort() {
-        return ((ServerConnector)server.getConnectors()[0]).getLocalPort();
+        return ((ServerConnector) server.getConnectors()[0]).getLocalPort();
     }
 
     private ServerConnector createConnector(int port) {
         var connector = new ServerConnector(server);
         connector.setName("main");
-        connector.setPort(Integer.parseInt(System.getProperty("API_PORT", "8080")));
+        connector.setPort(port);
         return connector;
     }
 
-    private static ServletContextHandler createHandler() {
+    private ServletContextHandler createHandler(UsersApi usersApi) {
         var contextHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        contextHandler.addServlet(new ServletHolder(API), "/");
+        contextHandler.addServlet(new ServletHolder(usersApi), "/");
         contextHandler.setVirtualHosts(List.of("@main"));
         return contextHandler;
     }

@@ -1,0 +1,1 @@
+INSERT INTO users (id, firstName, lastName) VALUES ('1d0bbcb2-9ef6-11ef-ba7c-6f55e9414db3', 'John', 'Smith');

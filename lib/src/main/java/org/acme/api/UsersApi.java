@@ -16,8 +16,10 @@ import java.util.regex.Pattern;
 @WebServlet(value = "/users/*")
 public class UsersApi extends HttpServlet {
 
-    public static final Pattern USERS_UUID_PATTERN = Pattern.compile("^(/users/)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(/[^/]*)?$");
-    public static final Pattern USERS_PATTERN = Pattern.compile("^(/users)(/)?$");
+    public static final Pattern USERS_UUID_PATTERN =
+            Pattern.compile("^(/users/)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(/[^/]*)?$");
+    public static final Pattern USERS_PATTERN =
+            Pattern.compile("^(/users)(/)?$");
     private final Function<Object, String> mapToJson;
     private final Supplier<List<UserDto>> getUsers;
     private final Function<UUID, UserDto> getUser;
