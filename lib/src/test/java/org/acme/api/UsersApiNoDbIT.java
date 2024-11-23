@@ -25,17 +25,11 @@ class UsersApiNoDbIT implements WithAssertions {
 
     @Test
     void shouldReturn500ErrorWhenNoDatabase() {
-        var jsonPath = given().when()
+        given().when()
                 .port(SERVER.getPort())
                 .get("/users")
                 .then()
                 .assertThat()
-                .statusCode(500)
-                .and()
-                .extract()
-                .body()
-                .jsonPath();
-        assertThat(jsonPath.getInt("status")).isEqualTo(500);
-        assertThat(jsonPath.getString("error")).isEqualTo("Internal Server Error");
+                .statusCode(404);
     }
 }

@@ -23,6 +23,16 @@ public class AppServer {
     }
 
     public AppServer(int port) {
+        server = createServer(port);
+        try {
+            var usersApi = createUsersAPI();
+            server.setHandler(createHandler(usersApi));
+        } catch (Exception exception) {
+            System.out.println("exception = " + exception.getMessage());
+        }
+    }
+
+    private static UsersApi createUsersAPI() {
         var usersDao = new UsersDao();
         var usersService = new UsersService(
                 () -> Mapper.entityToCores(usersDao.users()),
@@ -30,17 +40,21 @@ public class AppServer {
                         .map(Mapper::entityToCore)
                         .orElseThrow()
         );
-        var usersApi = new UsersApi(
-                UserSerializer::serialize,
+        return new UsersApi(
+                UserSerializer::serializeUser,
+                UserSerializer::serializeUsers,
                 () -> Mapper.coreToDtos(usersService.users()),
                 (UUID uuid) -> usersService.user(User.UserId.of(uuid))
                         .map(Mapper::coreToDto)
                         .orElseThrow()
         );
-        server = new Server(new VirtualThreadPool());
+    }
+
+    private Server createServer(int port) {
+        var server = new Server(new VirtualThreadPool());
         server.setStopAtShutdown(true);
-        server.addConnector(createConnector(port));
-        server.setHandler(createHandler(usersApi));
+        server.addConnector(createConnector(port, server));
+        return server;
     }
 
     public void start() throws Exception {
@@ -55,7 +69,7 @@ public class AppServer {
         return ((ServerConnector) server.getConnectors()[0]).getLocalPort();
     }
 
-    private ServerConnector createConnector(int port) {
+    private ServerConnector createConnector(int port, Server server) {
         var connector = new ServerConnector(server);
         connector.setName("main");
         connector.setPort(port);

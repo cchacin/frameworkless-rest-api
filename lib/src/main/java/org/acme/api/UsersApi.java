@@ -20,16 +20,19 @@ public class UsersApi extends HttpServlet {
             Pattern.compile("^(/users/)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(/[^/]*)?$");
     public static final Pattern USERS_PATTERN =
             Pattern.compile("^(/users)(/)?$");
-    private final Function<Object, String> mapToJson;
+    private final Function<UserDto, String> mapUserToJson;
+    private final Function<List<UserDto>, String> mapUsersToJson;
     private final Supplier<List<UserDto>> getUsers;
     private final Function<UUID, UserDto> getUser;
 
     public UsersApi(
-            Function<Object, String> mapToJson,
+            Function<UserDto, String> mapUserToJson,
+            Function<List<UserDto>, String> mapUsersToJson,
             Supplier<List<UserDto>> getUsers,
             Function<UUID, UserDto> getUser
     ) {
-        this.mapToJson = mapToJson;
+        this.mapUserToJson = mapUserToJson;
+        this.mapUsersToJson = mapUsersToJson;
         this.getUsers = getUsers;
         this.getUser = getUser;
     }
@@ -43,14 +46,14 @@ public class UsersApi extends HttpServlet {
         var USERS_UUID_MATCHER = USERS_UUID_PATTERN.matcher(path);
         var USERS_MATCHER = USERS_PATTERN.matcher(path);
         if (USERS_UUID_MATCHER.find()) {
-            writeBody(response, () -> this.mapToJson.apply(
+            writeBody(response, () -> this.mapUserToJson.apply(
                             getUser.apply(UUID.fromString(USERS_UUID_MATCHER.group(2)))
                     )
             );
             return;
         }
         if (USERS_MATCHER.find()) {
-            writeBody(response, () -> this.mapToJson.apply(getUsers.get()));
+            writeBody(response, () -> this.mapUsersToJson.apply(getUsers.get()));
             return;
         }
         writeNotFound(response);

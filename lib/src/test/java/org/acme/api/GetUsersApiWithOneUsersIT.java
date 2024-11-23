@@ -12,7 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static io.restassured.RestAssured.given;
 
 @Testcontainers
-class UsersApiWithOneUsersIT implements WithAssertions {
+class GetUsersApiWithOneUsersIT implements WithAssertions {
 
     static AppServer SERVER;
 

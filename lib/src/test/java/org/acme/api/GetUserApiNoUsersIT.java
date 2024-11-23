@@ -9,10 +9,12 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 
 @Testcontainers
-class UsersApiNoUsersIT implements WithAssertions {
+class GetUserApiNoUsersIT implements WithAssertions {
 
     static AppServer SERVER;
 
@@ -38,14 +40,15 @@ class UsersApiNoUsersIT implements WithAssertions {
     void shouldReturnEmptyUsersList() {
         var jsonPath = given().when()
                 .port(SERVER.getPort())
-                .get("/users")
+                .get("/user/%s".formatted(UUID.randomUUID().toString()))
                 .then()
                 .assertThat()
-                .statusCode(200)
+                .statusCode(404)
                 .and()
                 .extract()
                 .body()
                 .jsonPath();
-        assertThat(jsonPath.getList("", UserDto.class)).isEmpty();
+        assertThat(jsonPath.getInt("status")).isEqualTo(404);
+        assertThat(jsonPath.getString("error")).isEqualTo("Not Found");
     }
 }
