@@ -14,6 +14,7 @@ class UsersApiNoDbIT implements WithAssertions {
 
     @BeforeAll
     static void beforeAll() throws Exception {
+        System.setProperty("DB_JDBC_URL", "jdbc:postgresql://non-existent-host:5432/postgres");
         SERVER = new AppServer(0);
         SERVER.start();
     }
