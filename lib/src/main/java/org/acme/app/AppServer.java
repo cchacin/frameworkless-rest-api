@@ -24,12 +24,6 @@ public class AppServer {
 
     public AppServer(int port) {
         server = createServer(port);
-        try {
-            var usersApi = createUsersAPI();
-            server.setHandler(createHandler(usersApi));
-        } catch (Exception exception) {
-            System.out.println("exception = " + exception.getMessage());
-        }
     }
 
     private static UsersApi createUsersAPI() {
@@ -54,6 +48,11 @@ public class AppServer {
         var server = new Server(new VirtualThreadPool());
         server.setStopAtShutdown(true);
         server.addConnector(createConnector(port, server));
+        try {
+            server.setHandler(createHandler(createUsersAPI()));
+        } catch (Exception exception) {
+            System.out.println("exception = " + exception.getMessage());
+        }
         return server;
     }
 
