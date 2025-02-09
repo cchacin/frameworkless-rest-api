@@ -12,8 +12,12 @@ import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.thread.VirtualThreadPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AppServer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppServer.class);
 
     private final Server server;
 
@@ -52,7 +56,7 @@ public class AppServer {
         try {
             server.setHandler(createHandler(createUsersAPI()));
         } catch (Exception exception) {
-            System.out.println("exception = " + exception.getMessage());
+            LOGGER.error("Error", exception);
         }
         return server;
     }
