@@ -2,11 +2,12 @@
 
 ## Companion Videos
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/-UVrMS43uEQ?si=WDZQBKW-0CowYUFn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b8E3WhSWLhs?si=z_17pSS2tkDJS8M5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/j7zD7it61S0?si=_OELAw9zlWGUNrbG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Part 1](https://img.youtube.com/vi/-UVrMS43uEQ/0.jpg)](https://youtu.be/-UVrMS43uEQ?si=3A9zNcuWjEXTlXmQ)
+<br />
+[![Part 2](https://img.youtube.com/vi/b8E3WhSWLhs/0.jpg)](https://youtu.be/b8E3WhSWLhs?si=CWsnSYs0E99pRjob)
+<br />
+[![Part 3](https://img.youtube.com/vi/j7zD7it61S0/0.jpg)](https://youtu.be/j7zD7it61S0?si=X55s3m1bqxO3spyR)
+<br />
 
 
 ## Components / Libraries
