@@ -1,7 +1,5 @@
 package org.acme.app;
 
-import java.util.List;
-import java.util.UUID;
 import org.acme.api.UsersApi;
 import org.acme.core.User;
 import org.acme.core.UsersService;
@@ -11,9 +9,13 @@ import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.VirtualThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.UUID;
 
 public class AppServer {
 
@@ -50,7 +52,13 @@ public class AppServer {
     }
 
     private Server createServer(int port) {
-        var server = new Server(new VirtualThreadPool());
+        var threadPool = new QueuedThreadPool();
+
+        // Configurable, bounded, virtual thread executor (preferred).
+        threadPool.setVirtualThreadsExecutor(new VirtualThreadPool());
+
+        // For server-side usage.
+        var server = new Server(threadPool);
         server.setStopAtShutdown(true);
         server.addConnector(createConnector(port, server));
         try {

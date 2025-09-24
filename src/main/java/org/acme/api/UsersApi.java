@@ -77,7 +77,7 @@ public class UsersApi extends HttpServlet {
         try {
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().print(responseBody.get());
-        } catch (Exception e) {
+        } catch (Exception _) {
             writeError(response);
         }
     }
