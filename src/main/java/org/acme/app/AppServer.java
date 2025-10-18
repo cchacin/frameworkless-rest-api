@@ -1,10 +1,16 @@
 package org.acme.app;
 
+import jakarta.servlet.DispatcherType;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.UUID;
 import org.acme.api.UsersApi;
 import org.acme.core.User;
 import org.acme.core.UsersService;
 import org.acme.dao.UsersDao;
+import org.acme.filters.TraceFilter;
 import org.acme.json.UserSerializer;
+import org.eclipse.jetty.ee10.servlet.FilterHolder;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Server;
@@ -13,9 +19,6 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.VirtualThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.UUID;
 
 public class AppServer {
 
@@ -90,6 +93,10 @@ public class AppServer {
 
     private ServletContextHandler createHandler(UsersApi usersApi) {
         var contextHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        contextHandler.addFilter(
+                new FilterHolder(new TraceFilter()),
+                "/*",
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
         contextHandler.addServlet(new ServletHolder(usersApi), "/");
         contextHandler.setVirtualHosts(List.of("@main"));
         return contextHandler;
