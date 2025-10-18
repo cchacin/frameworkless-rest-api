@@ -2,6 +2,8 @@ package org.acme.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.acme.context.AppContext;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,7 @@ public class UsersDao {
         try (var cnn = datasource.getConnection();
                 var statement = cnn.prepareStatement(query);
                 var resultSet = statement.executeQuery()) {
+            System.out.println("AppContext.TRACE_ID.get() = " + AppContext.TRACE_ID.get());
             while (resultSet.next()) {
                 users.add(
                         new UserEntity(

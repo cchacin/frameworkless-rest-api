@@ -8,9 +8,11 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.acme.context.AppContext;
+
 import java.io.IOException;
 import java.util.UUID;
-import org.acme.context.AppContext;
 
 @WebFilter(urlPatterns = "/*")
 public class TraceFilter implements Filter {
@@ -25,12 +27,14 @@ public class TraceFilter implements Filter {
         if (traceId == null || traceId.isEmpty()) {
             traceId = UUID.randomUUID().toString();
         }
-
-        httpResponse.setHeader(AppContext.TRACE_ID_HEADER, traceId);
         try {
+            AppContext.TRACE_ID.set(traceId);
+            httpResponse.setHeader(AppContext.TRACE_ID_HEADER, traceId);
             chain.doFilter(request, response); // Continue filter chain
         } catch (Exception e) {
             // Log exception
+        } finally {
+            AppContext.TRACE_ID.remove();
         }
     }
 }
