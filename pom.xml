@@ -11,7 +11,7 @@
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <junit.version>5.13.4</junit.version>
+        <junit.version>6.0.0</junit.version>
         <awaitility.version>4.3.0</awaitility.version>
         <assertj.version>3.27.6</assertj.version>
         <jqwik.version>1.9.3</jqwik.version>
@@ -135,14 +135,22 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.5.4</version>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.5.4</version>
                 <executions>
                     <execution>
                         <id>integration-test</id>
@@ -159,6 +167,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.github.johnpoth</groupId>
@@ -168,7 +179,7 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.46.1</version>
+                <version>3.0.0</version>
                 <configuration>
                     <java>
                         <googleJavaFormat>
@@ -176,14 +187,14 @@
                         </googleJavaFormat>
                     </java>
                 </configuration>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>compile</phase>-->
-<!--                    </execution>-->
-<!--                </executions>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
