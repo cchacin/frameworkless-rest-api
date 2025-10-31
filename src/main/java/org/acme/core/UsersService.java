@@ -5,16 +5,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class UsersService {
-
-    private final Supplier<List<User>> getUsersFromDb;
-    private final Function<User.UserId, User> getUserFromDb;
-
-    public UsersService(
-            Supplier<List<User>> getUsersFromDb, Function<User.UserId, User> getUserFromDb) {
-        this.getUsersFromDb = getUsersFromDb;
-        this.getUserFromDb = getUserFromDb;
-    }
+public record UsersService(
+        Supplier<List<User>> getUsersFromDb, Function<User.UserId, User> getUserFromDb) {
 
     public List<User> users() {
         return getUsersFromDb.get();
