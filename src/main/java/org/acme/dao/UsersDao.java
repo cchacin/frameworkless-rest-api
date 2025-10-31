@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
-import org.acme.context.AppContext;
 
 public class UsersDao {
     private final DataSource datasource;
@@ -82,14 +81,6 @@ public class UsersDao {
         try (var cnn = datasource.getConnection();
                 var statement = cnn.prepareStatement(query);
                 var resultSet = statement.executeQuery()) {
-            ScopedValue.where(AppContext.TRACE_ID, "NADA")
-                    .run(
-                            () -> {
-                                System.out.println(
-                                        "AppContext.TRACE_ID.get() = " + AppContext.TRACE_ID.get());
-                            });
-
-            System.out.println("AppContext.TRACE_ID.get() = " + AppContext.TRACE_ID.get());
             while (resultSet.next()) {
                 users.add(
                         new UserEntity(
